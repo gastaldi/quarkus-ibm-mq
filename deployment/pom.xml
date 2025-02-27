@@ -16,6 +16,11 @@
             <artifactId>quarkus-arc-deployment</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkiverse.ironjacamar</groupId>
+            <artifactId>quarkus-ironjacamar-deployment</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.quarkiverse.ibm.mq</groupId>
             <artifactId>quarkus-ibm-mq</artifactId>
             <version>${project.version}</version>
