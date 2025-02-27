@@ -1,0 +1,5 @@
+name: quarkus-ibm-mq
+title: Ibm Mq
+version: dev
+nav:
+  - modules/ROOT/nav.adoc
