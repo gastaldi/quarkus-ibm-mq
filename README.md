@@ -4,16 +4,16 @@
 
 ## Installation Steps
 
-Because the com.ibm.mq.jakarta.connector-9.4.2.0.jar isn't available in Maven, first thing you need to do is to install
+Because the `com.ibm.mq.jakarta.connector-9.4.2.0.jar` isn't available in Maven, first thing you need to do is to install
 it in your local Maven repository:
 
 ### Download the RAR file
 
 Download the RAR file
 from https://repo1.maven.org/maven2/com/ibm/mq/wmq.jakarta.jmsra/9.4.2.0/wmq.jakarta.jmsra-9.4.2.0.rar and extract the
-`com.ibm.mq.jakarta.connector.jar` inside of it.
+`com.ibm.mq.jakarta.connector.jar` file inside of it.
 
-### Install the RAR file in your local Maven repository
+### Install the Connector JAR in your local Maven repository
 
 ```shell 
   mvn install:install-file -Dfile=com.ibm.mq.jakarta.connector.jar  -DgroupId=com.ibm.mq -DartifactId=com.ibm.mq.jakarta.connector -Dversion=9.4.2.0 -Dpackaging=jar
@@ -22,7 +22,7 @@ from https://repo1.maven.org/maven2/com/ibm/mq/wmq.jakarta.jmsra/9.4.2.0/wmq.jak
 Now you can build this project with the following command:
 
 ```shell
-  mvn clean install
+  mvn clean install -DskipTests
 ```
 
 ## Usage
