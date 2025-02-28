@@ -1,27 +1,50 @@
-# Quarkus Ibm Mq
+# Quarkus IBM MQ
 
-[![Version](https://img.shields.io/maven-central/v/io.quarkiverse.ibm-mq/quarkus-ibm-mq?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.ibm-mq/quarkus-ibm-mq-parent)
+[![Version](https://img.shields.io/maven-central/v/io.quarkiverse.ibm.mq/quarkus-ibm-mq?logo=apache-maven&style=flat-square)](https://central.sonatype.com/artifact/io.quarkiverse.ibm-mq/quarkus-ibm-mq-parent)
 
-## Welcome to Quarkiverse!
+## Installation Steps
 
-Congratulations and thank you for creating a new Quarkus extension project in Quarkiverse!
+Because the com.ibm.mq.jakarta.connector-9.4.2.0.jar isn't available in Maven, first thing you need to do is to install
+it in your local Maven repository:
 
-Feel free to replace this content with the proper description of your new project and necessary instructions how to use and contribute to it.
+### Download the RAR file
 
-You can find the basic info, Quarkiverse policies and conventions in [the Quarkiverse wiki](https://github.com/quarkiverse/quarkiverse/wiki).
+Download the RAR file
+from https://repo1.maven.org/maven2/com/ibm/mq/wmq.jakarta.jmsra/9.4.2.0/wmq.jakarta.jmsra-9.4.2.0.rar and extract the
+`com.ibm.mq.jakarta.connector.jar` inside of it.
 
-In case you are creating a Quarkus extension project for the first time, please follow [Building My First Extension](https://quarkus.io/guides/building-my-first-extension) guide.
+### Install the RAR file in your local Maven repository
 
-Other useful articles related to Quarkus extension development can be found under the [Writing Extensions](https://quarkus.io/guides/#writing-extensions) guide category on the [Quarkus.io](https://quarkus.io) website.
+```shell 
+  mvn install:install-file -Dfile=com.ibm.mq.jakarta.connector.jar  -DgroupId=com.ibm.mq -DartifactId=com.ibm.mq.jakarta.connector -Dversion=9.4.2.0 -Dpackaging=jar
+```
 
-Thanks again, good luck and have fun!
+Now you can build this project with the following command:
 
-## Documentation
+```shell
+  mvn clean install
+```
 
-The documentation for this extension should be maintained as part of this repository and it is stored in the `docs/` directory.
+## Usage
 
-The layout should follow the [Antora's Standard File and Directory Set](https://docs.antora.org/antora/2.3/standard-directories/).
+To use this extension, add the following dependency to your project:
 
-Once the docs are ready to be published, please open a PR including this repository in the [Quarkiverse Docs Antora playbook](https://github.com/quarkiverse/quarkiverse-docs/blob/main/antora-playbook.yml#L7). See an example [here](https://github.com/quarkiverse/quarkiverse-docs/pull/1)
+```xml
+<dependency>
+    <groupId>io.quarkiverse.ibm.mq</groupId>
+    <artifactId>quarkus-ibm-mq</artifactId>
+    <version>999-SNAPSHOT</version>
+</dependency>
+```
 
-Your documentation will then be published to the <https://docs.quarkiverse.io/> website.
+## Configuration
+
+The following properties can be used to configure the IBM MQ connection:
+
+```properties
+quarkus.ironjacamar.ra.kind=ibm-mq
+quarkus.ironjacamar.ra.config.host=localhost
+quarkus.ironjacamar.ra.config.port=1414
+quarkus.ironjacamar.ra.config.channel=DEV.ADMIN.SVRCONN
+quarkus.ironjacamar.ra.config.queueManager=QM1
+```

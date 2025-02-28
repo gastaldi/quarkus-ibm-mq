@@ -31,6 +31,16 @@ import io.quarkiverse.ironjacamar.runtime.endpoint.MessageEndpointWrapper;
 public class MQResourceAdapterFactory implements ResourceAdapterFactory {
 
     @Override
+    public String getProductName() {
+        return "IBM MQ Resource Adapter";
+    }
+
+    @Override
+    public String getProductVersion() {
+        return "9.4.2.0";
+    }
+
+    @Override
     public ResourceAdapter createResourceAdapter(String id, Map<String, String> config) throws ResourceException {
         ResourceAdapterImpl adapter = new ResourceAdapterImpl();
         //TODO: Set the properties
@@ -56,6 +66,8 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         ActivationSpecImpl activationSpec = new ActivationSpecImpl();
         activationSpec.setResourceAdapter(adapter);
         activationSpec.setUseJNDI(false);
+        //TODO: Set the properties
+
         return activationSpec;
     }
 
