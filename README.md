@@ -4,6 +4,8 @@
 
 ## Installation Steps
 
+You need to build the project locally first to generate the SNAPSHOT and have it install the missing JARs in the local repository
+
 ## Usage
 
 To use this extension, add the following dependency to your project:
