@@ -20,6 +20,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSContext;
+import jakarta.jms.Queue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
@@ -34,7 +35,9 @@ public class IbmMqResource {
     @GET
     public String hello() {
         try (JMSContext context = connectionFactory.createContext()) {
-            System.out.println("CONTEXT CREATED" + context);
+            Queue queue = context.createQueue("DEV.QUEUE.1");
+            context.createProducer().send(queue, "Hello");
+//            System.out.println("CONTEXT CREATED" + context);
         }
         return "Hello ibm-mq";
     }
