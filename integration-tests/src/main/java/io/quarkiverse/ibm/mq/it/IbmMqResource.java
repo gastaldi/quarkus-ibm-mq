@@ -20,7 +20,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSContext;
+import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
+import jakarta.jms.TextMessage;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
@@ -36,8 +38,11 @@ public class IbmMqResource {
     public String hello() {
         try (JMSContext context = connectionFactory.createContext()) {
             Queue queue = context.createQueue("DEV.QUEUE.1");
-            context.createProducer().send(queue, "Hello");
-//            System.out.println("CONTEXT CREATED" + context);
+            TextMessage textMessage = context.createTextMessage("Hello");
+            textMessage.setJMSReplyTo(context.createQueue("DEV.QUEUE.2"));
+            context.createProducer().send(queue, textMessage);
+        } catch (JMSException e) {
+            throw new RuntimeException(e);
         }
         return "Hello ibm-mq";
     }

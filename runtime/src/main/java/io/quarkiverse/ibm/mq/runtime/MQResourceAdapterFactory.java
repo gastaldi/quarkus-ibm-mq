@@ -58,7 +58,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         factory.setChannel(wrapper.config.get("channel"));
         factory.setUserName(wrapper.config.get("user"));
         factory.setPassword(wrapper.config.get("password"));
-        factory.setResourceAdapter(((ResourceAdapterWrapper)adapter).delegate);
+        factory.setResourceAdapter(((ResourceAdapterWrapper) adapter).delegate);
         return factory;
     }
 
@@ -66,7 +66,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
     public ActivationSpec createActivationSpec(String id, ResourceAdapter adapter, Class<?> type, Map<String, String> config)
             throws ResourceException {
         ActivationSpecImpl activationSpec = new ActivationSpecImpl();
-        activationSpec.setResourceAdapter(((ResourceAdapterWrapper)adapter).delegate);
+        activationSpec.setResourceAdapter(((ResourceAdapterWrapper) adapter).delegate);
         activationSpec.setUseJNDI(false);
         //TODO: Set the properties
         activationSpec.setDestination(config.get("destination"));
