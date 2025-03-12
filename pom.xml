@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
-        <version>18</version>
+        <version>19</version>
     </parent>
     <groupId>io.quarkiverse.ibm.mq</groupId>
     <artifactId>quarkus-ibm-mq-parent</artifactId>
