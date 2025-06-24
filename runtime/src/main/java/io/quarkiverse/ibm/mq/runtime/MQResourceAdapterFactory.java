@@ -58,23 +58,26 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         factory.setChannel(wrapper.config.get("channel"));
         factory.setUserName(wrapper.config.get("user"));
         factory.setPassword(wrapper.config.get("password"));
+        factory.setSslCipherSuite(wrapper.config.get("ssl-cipher-suite"));
         factory.setResourceAdapter(((ResourceAdapterWrapper) adapter).delegate);
         return factory;
     }
 
     @Override
-    public ActivationSpec createActivationSpec(String id, ResourceAdapter adapter, Class<?> type, Map<String, String> config)
-            throws ResourceException {
+    public ActivationSpec createActivationSpec(String id, ResourceAdapter adapter, Class<?> type, Map<String, String> config) {
+        ResourceAdapterWrapper wrapper = (ResourceAdapterWrapper) adapter;
         ActivationSpecImpl activationSpec = new ActivationSpecImpl();
-        activationSpec.setResourceAdapter(((ResourceAdapterWrapper) adapter).delegate);
+        activationSpec.setResourceAdapter(wrapper.delegate);
         activationSpec.setUseJNDI(false);
-        //TODO: Set the properties
         activationSpec.setDestination(config.get("destination"));
         activationSpec.setDestinationType(config.get("destination-type"));
         activationSpec.setUserName(config.get("user"));
         activationSpec.setPassword(config.get("password"));
         activationSpec.setQueueManager(config.get("queue-manager"));
         activationSpec.setChannel(config.get("channel"));
+        activationSpec.setHostName(wrapper.config.get("host"));
+        activationSpec.setPort(wrapper.config.get("port"));
+        activationSpec.setSslCipherSuite(wrapper.config.get("ssl-cipher-suite"));
         return activationSpec;
     }
 
