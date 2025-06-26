@@ -19,7 +19,16 @@
             <groupId>io.quarkiverse.ironjacamar</groupId>
             <artifactId>quarkus-ironjacamar-deployment</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-devservices-deployment</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.ibm.mq/mq-java-testcontainer -->
+        <dependency>
+            <groupId>com.ibm.mq</groupId>
+            <artifactId>mq-java-testcontainer</artifactId>
+            <version>1.21.2</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkiverse.ibm.mq</groupId>
             <artifactId>quarkus-ibm-mq</artifactId>
