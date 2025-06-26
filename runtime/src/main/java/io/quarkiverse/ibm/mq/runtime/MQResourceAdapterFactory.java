@@ -52,7 +52,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
             throws ResourceException {
         ResourceAdapterWrapper wrapper = (ResourceAdapterWrapper) adapter;
         ManagedConnectionFactoryImpl factory = new ManagedConnectionFactoryImpl();
-        factory.setHostName(wrapper.config.get("host"));
+        factory.setHostName(wrapper.config.get("host-name"));
         factory.setPort(wrapper.config.get("port"));
         factory.setQueueManager(wrapper.config.get("queue-manager"));
         factory.setChannel(wrapper.config.get("channel"));
@@ -75,7 +75,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         activationSpec.setPassword(config.get("password"));
         activationSpec.setQueueManager(config.get("queue-manager"));
         activationSpec.setChannel(config.get("channel"));
-        activationSpec.setHostName(wrapper.config.get("host"));
+        activationSpec.setHostName(wrapper.config.get("host-name"));
         activationSpec.setPort(wrapper.config.get("port"));
         activationSpec.setSslCipherSuite(wrapper.config.get("ssl-cipher-suite"));
         return activationSpec;

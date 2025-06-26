@@ -30,7 +30,7 @@ The following properties can be used to configure the IBM MQ connection:
 
 ```properties
 quarkus.ironjacamar.ra.kind=ibm-mq
-quarkus.ironjacamar.ra.config.host=localhost
+quarkus.ironjacamar.ra.config.host-name=localhost
 quarkus.ironjacamar.ra.config.port=1414
 quarkus.ironjacamar.ra.config.channel=DEV.ADMIN.SVRCONN
 quarkus.ironjacamar.ra.config.queue-manager=QM1
