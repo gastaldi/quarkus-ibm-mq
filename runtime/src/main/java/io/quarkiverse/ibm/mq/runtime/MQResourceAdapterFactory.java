@@ -1,5 +1,6 @@
 package io.quarkiverse.ibm.mq.runtime;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.transaction.xa.XAResource;
@@ -43,50 +44,62 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
     @Override
     public ResourceAdapter createResourceAdapter(String id, Map<String, String> config) throws ResourceException {
         ResourceAdapterImpl adapter = new ResourceAdapterImpl();
-        if(config.containsKey("max-connections")) adapter.setMaxConnections(config.get("max-connections"));
-        if(config.containsKey("reconnection-retry-count")) adapter.setReconnectionRetryCount(config.get("reconnection-retry-count"));
-        if(config.containsKey("reconnection-retry-interval")) adapter.setReconnectionRetryInterval(config.get("reconnection-retry-interval"));
-        if(config.containsKey("startup-retry-count")) adapter.setStartupRetryCount(config.get("startup-retry-count"));
-        if(config.containsKey("startup-retry-interval")) adapter.setStartupRetryInterval(config.get("startup-retry-interval"));
-        if(config.containsKey("support-mq-extensions")) adapter.setSupportMQExtensions(config.get("support-mq-extensions"));
-        if(config.containsKey("native-library-path")) adapter.setNativeLibraryPath(config.get("native-library-path"));
-        if(config.containsKey("log-writer-enabled")) adapter.setLogWriterEnabled(config.get("log-writer-enabled"));
-        if(config.containsKey("trace-enabled")) adapter.setTraceEnabled(config.get("trace-enabled"));
-        if(config.containsKey("trace-level")) adapter.setTraceLevel(config.get("trace-level"));
+        if (config.containsKey("max-connections"))
+            adapter.setMaxConnections(config.get("max-connections"));
+        if (config.containsKey("reconnection-retry-count"))
+            adapter.setReconnectionRetryCount(config.get("reconnection-retry-count"));
+        if (config.containsKey("reconnection-retry-interval"))
+            adapter.setReconnectionRetryInterval(config.get("reconnection-retry-interval"));
+        if (config.containsKey("startup-retry-count"))
+            adapter.setStartupRetryCount(config.get("startup-retry-count"));
+        if (config.containsKey("startup-retry-interval"))
+            adapter.setStartupRetryInterval(config.get("startup-retry-interval"));
+        if (config.containsKey("support-mq-extensions"))
+            adapter.setSupportMQExtensions(config.get("support-mq-extensions"));
+        if (config.containsKey("native-library-path"))
+            adapter.setNativeLibraryPath(config.get("native-library-path"));
+        if (config.containsKey("log-writer-enabled"))
+            adapter.setLogWriterEnabled(config.get("log-writer-enabled"));
+        if (config.containsKey("trace-enabled"))
+            adapter.setTraceEnabled(config.get("trace-enabled"));
+        if (config.containsKey("trace-level"))
+            adapter.setTraceLevel(config.get("trace-level"));
         return new ResourceAdapterWrapper(adapter, config);
     }
 
     @Override
-    public ManagedConnectionFactory createManagedConnectionFactory(String id, ResourceAdapter adapter)
-            throws ResourceException {
+    public ManagedConnectionFactory createManagedConnectionFactory(String id, ResourceAdapter adapter) {
         ResourceAdapterWrapper wrapper = (ResourceAdapterWrapper) adapter;
         ManagedConnectionFactoryImpl factory = new ManagedConnectionFactoryImpl();
-        factory.setHostName(wrapper.config.get("host-name"));
-        factory.setPort(wrapper.config.get("port"));
-        factory.setQueueManager(wrapper.config.get("queue-manager"));
-        factory.setChannel(wrapper.config.get("channel"));
-        factory.setUserName(wrapper.config.get("user"));
-        factory.setPassword(wrapper.config.get("password"));
-        factory.setSslCipherSuite(wrapper.config.get("ssl-cipher-suite"));
-        factory.setResourceAdapter(((ResourceAdapterWrapper) adapter).delegate);
+        Map<String, String> config = new HashMap<>(wrapper.config);
+        factory.setHostName(config.get("host-name"));
+        factory.setPort(config.get("port"));
+        factory.setQueueManager(config.get("queue-manager"));
+        factory.setChannel(config.get("channel"));
+        factory.setUserName(config.get("user"));
+        factory.setPassword(config.get("password"));
+        factory.setSslCipherSuite(config.get("ssl-cipher-suite"));
+        factory.setResourceAdapter(wrapper.delegate);
         return factory;
     }
 
     @Override
     public ActivationSpec createActivationSpec(String id, ResourceAdapter adapter, Class<?> type, Map<String, String> config) {
         ResourceAdapterWrapper wrapper = (ResourceAdapterWrapper) adapter;
+        Map<String, String> mergedConfig = new HashMap<>(wrapper.config);
+        mergedConfig.putAll(config);
         ActivationSpecImpl activationSpec = new ActivationSpecImpl();
         activationSpec.setResourceAdapter(wrapper.delegate);
         activationSpec.setUseJNDI(false);
-        activationSpec.setDestination(config.get("destination"));
-        activationSpec.setDestinationType(config.get("destination-type"));
-        activationSpec.setUserName(config.get("user"));
-        activationSpec.setPassword(config.get("password"));
-        activationSpec.setQueueManager(config.get("queue-manager"));
-        activationSpec.setChannel(config.get("channel"));
-        activationSpec.setHostName(wrapper.config.get("host-name"));
-        activationSpec.setPort(wrapper.config.get("port"));
-        activationSpec.setSslCipherSuite(wrapper.config.get("ssl-cipher-suite"));
+        activationSpec.setDestination(mergedConfig.get("destination"));
+        activationSpec.setDestinationType(mergedConfig.get("destination-type"));
+        activationSpec.setUserName(mergedConfig.get("user"));
+        activationSpec.setPassword(mergedConfig.get("password"));
+        activationSpec.setQueueManager(mergedConfig.get("queue-manager"));
+        activationSpec.setChannel(mergedConfig.get("channel"));
+        activationSpec.setHostName(mergedConfig.get("host-name"));
+        activationSpec.setPort(mergedConfig.get("port"));
+        activationSpec.setSslCipherSuite(mergedConfig.get("ssl-cipher-suite"));
         return activationSpec;
     }
 
