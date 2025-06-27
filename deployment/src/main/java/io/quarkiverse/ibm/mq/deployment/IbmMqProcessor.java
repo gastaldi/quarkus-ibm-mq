@@ -23,6 +23,7 @@ import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.dev.devservices.DevServicesConfig;
+import io.quarkus.devservices.common.JBossLoggingConsumer;
 
 class IbmMqProcessor {
 
@@ -55,22 +56,22 @@ class IbmMqProcessor {
     public DevServicesResultBuildItem createContainer() {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
+                .withWebServer()
                 .withAppUser("app")
                 .withAppPassword("app")
                 .withAdminUser("admin")
                 .withAdminPassword("admin")
+                .withLogConsumer(new JBossLoggingConsumer(logger))
                 .withCreateContainerCmdModifier(cmd -> cmd.withPlatform("linux/amd64"));
 
         container.start();
 
         Map<String, String> configOverrides = Map.of(
-                "quarkus.ibm-mq.devservices.host-name", container.getHost(),
-                "quarkus.ibm-mq.devservices.port", String.valueOf(container.getPort()),
-                "quarkus.ibm-mq.devservices.admin-user", container.getAdminUser(),
-                "quarkus.ibm-mq.devservices.admin-password", container.getAdminPassword()
-        );
+                "ibm-mq.host-name", container.getHost(),
+                "ibm-mq.port", String.valueOf(container.getPort()),
+                "ibm-mq.admin-user", container.getAdminUser(),
+                "ibm-mq.admin-password", container.getAdminPassword());
 
-        System.out.println(configOverrides);
         return new DevServicesResultBuildItem.RunningDevService(FEATURE,
                 container.getContainerId(),
                 container::close,

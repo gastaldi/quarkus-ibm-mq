@@ -42,7 +42,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
     }
 
     @Override
-    public ResourceAdapter createResourceAdapter(String id, Map<String, String> config) throws ResourceException {
+    public ResourceAdapter createResourceAdapter(String id, Map<String, String> config) {
         ResourceAdapterImpl adapter = new ResourceAdapterImpl();
         if (config.containsKey("max-connections"))
             adapter.setMaxConnections(config.get("max-connections"));
@@ -93,6 +93,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         activationSpec.setUseJNDI(false);
         activationSpec.setDestination(mergedConfig.get("destination"));
         activationSpec.setDestinationType(mergedConfig.get("destination-type"));
+        activationSpec.setDynamicallyBalanced(mergedConfig.get("dynamically-balanced"));
         activationSpec.setUserName(mergedConfig.get("user"));
         activationSpec.setPassword(mergedConfig.get("password"));
         activationSpec.setQueueManager(mergedConfig.get("queue-manager"));
