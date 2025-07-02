@@ -34,4 +34,10 @@ quarkus.ironjacamar.ra.config.host-name=localhost
 quarkus.ironjacamar.ra.config.port=1414
 quarkus.ironjacamar.ra.config.channel=DEV.ADMIN.SVRCONN
 quarkus.ironjacamar.ra.config.queue-manager=QM1
+quarkus.ironjacamar.ra.config.username=admin
+quarkus.ironjacamar.ra.config.password=admin
+
+quarkus.ironjacamar.activation-spec.foo.config.destination=DEV.QUEUE.1
+quarkus.ironjacamar.activation-spec.foo.config.destination-type=jakarta.jms.Queue
+
 ```
