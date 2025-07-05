@@ -52,11 +52,11 @@ class IbmMqProcessor {
     }
 
     @SuppressWarnings("resource")
-    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = DevServicesConfig.Enabled.class)
-    public DevServicesResultBuildItem createContainer() {
+    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = { DevServicesConfig.Enabled.class,
+            IbmMqBuildTimeConfig.DevServicesConfig.Enabled.class })
+    public DevServicesResultBuildItem createContainer(IbmMqBuildTimeConfig buildTimeConfig) {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
-                .withWebServer()
                 .withAppUser("app")
                 .withAppPassword("app")
                 .withAdminUser("admin")
