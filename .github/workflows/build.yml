@@ -39,6 +39,18 @@ jobs:
 #        os: [windows-latest, macos-latest, ubuntu-latest]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      mq:
+        # Docker Hub image
+        image: icr.io/ibm-messaging/mq:latest
+        ports:
+          - 1414:1414
+          - 9443:9443
+        env:
+          LICENSE: accept
+          MQ_QMGR_NAME: QM1
     steps:
       - name: Prepare git
         run: git config --global core.autocrlf false
