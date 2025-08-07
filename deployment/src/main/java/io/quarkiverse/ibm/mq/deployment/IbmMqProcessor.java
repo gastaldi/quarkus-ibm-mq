@@ -3,6 +3,7 @@ package io.quarkiverse.ibm.mq.deployment;
 import java.util.Map;
 
 import org.jboss.logging.Logger;
+import org.testcontainers.containers.Network;
 
 import com.ibm.mq.MQJavaComponent;
 import com.ibm.mq.jakarta.jms.MQJMSComponent;
@@ -57,6 +58,7 @@ class IbmMqProcessor {
     public DevServicesResultBuildItem createContainer(IbmMqBuildTimeConfig buildTimeConfig) {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
+                .withNetwork(Network.SHARED)
                 .withLogConsumer(new JBossLoggingConsumer(logger))
                 .withCreateContainerCmdModifier(cmd -> cmd.withPlatform("linux/amd64"));
 
@@ -72,9 +74,10 @@ class IbmMqProcessor {
                 "ibm-mq.channel", container.getChannel(),
                 "ibm-mq.queue-manager", container.getQueueManager());
 
-        return new DevServicesResultBuildItem.RunningDevService(FEATURE,
-                container.getContainerId(),
-                container::close,
-                configOverrides).toBuildItem();
+        return DevServicesResultBuildItem.discovered()
+                .containerId(container.getContainerId())
+                .description("IBM MQ Container")
+                .config(configOverrides)
+                .build();
     }
 }
