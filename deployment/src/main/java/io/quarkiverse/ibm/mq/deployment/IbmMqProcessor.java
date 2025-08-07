@@ -57,10 +57,6 @@ class IbmMqProcessor {
     public DevServicesResultBuildItem createContainer(IbmMqBuildTimeConfig buildTimeConfig) {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
-                .withAppUser("app")
-                .withAppPassword("app")
-                .withAdminUser("admin")
-                .withAdminPassword("admin")
                 .withLogConsumer(new JBossLoggingConsumer(logger))
                 .withCreateContainerCmdModifier(cmd -> cmd.withPlatform("linux/amd64"));
 
@@ -70,7 +66,11 @@ class IbmMqProcessor {
                 "ibm-mq.host-name", container.getHost(),
                 "ibm-mq.port", String.valueOf(container.getPort()),
                 "ibm-mq.admin-user", container.getAdminUser(),
-                "ibm-mq.admin-password", container.getAdminPassword());
+                "ibm-mq.admin-password", container.getAdminPassword(),
+                "ibm-mq.app-user", container.getAppUser(),
+                "ibm-mq.app-password", container.getAppPassword(),
+                "ibm-mq.channel", container.getChannel(),
+                "ibm-mq.queue-manager", container.getQueueManager());
 
         return new DevServicesResultBuildItem.RunningDevService(FEATURE,
                 container.getContainerId(),
