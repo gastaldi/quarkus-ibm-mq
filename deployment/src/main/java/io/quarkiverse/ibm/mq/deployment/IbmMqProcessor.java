@@ -76,6 +76,7 @@ class IbmMqProcessor {
 
         return DevServicesResultBuildItem.discovered()
                 .containerId(container.getContainerId())
+                .name(container.getContainerName())
                 .description("IBM MQ Container")
                 .config(configOverrides)
                 .build();
