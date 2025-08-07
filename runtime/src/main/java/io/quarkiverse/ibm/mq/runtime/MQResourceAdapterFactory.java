@@ -18,6 +18,8 @@ import jakarta.resource.spi.ResourceAdapterInternalException;
 import jakarta.resource.spi.endpoint.MessageEndpoint;
 import jakarta.resource.spi.endpoint.MessageEndpointFactory;
 
+import org.jboss.logging.Logger;
+
 import com.ibm.mq.jakarta.connector.ResourceAdapterImpl;
 import com.ibm.mq.jakarta.connector.inbound.ActivationSpecImpl;
 import com.ibm.mq.jakarta.connector.outbound.ManagedConnectionFactoryImpl;
@@ -30,6 +32,8 @@ import io.quarkiverse.ironjacamar.runtime.endpoint.MessageEndpointWrapper;
 @ResourceAdapterKind("ibm-mq")
 @ResourceAdapterTypes(connectionFactoryTypes = { ConnectionFactory.class, XAConnectionFactory.class })
 public class MQResourceAdapterFactory implements ResourceAdapterFactory {
+
+    private static final Logger log = Logger.getLogger(MQResourceAdapterFactory.class);
 
     @Override
     public String getProductName() {
@@ -44,26 +48,22 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
     @Override
     public ResourceAdapter createResourceAdapter(String id, Map<String, String> config) {
         ResourceAdapterImpl adapter = new ResourceAdapterImpl();
-        if (config.containsKey("log-writer-enabled"))
-            adapter.setLogWriterEnabled(config.get("log-writer-enabled"));
-        if (config.containsKey("max-connections"))
-            adapter.setMaxConnections(config.get("max-connections"));
-        if (config.containsKey("native-library-path"))
-            adapter.setNativeLibraryPath(config.get("native-library-path"));
-        if (config.containsKey("reconnection-retry-count"))
-            adapter.setReconnectionRetryCount(config.get("reconnection-retry-count"));
-        if (config.containsKey("reconnection-retry-interval"))
-            adapter.setReconnectionRetryInterval(config.get("reconnection-retry-interval"));
-        if (config.containsKey("startup-retry-count"))
-            adapter.setStartupRetryCount(config.get("startup-retry-count"));
-        if (config.containsKey("startup-retry-interval"))
-            adapter.setStartupRetryInterval(config.get("startup-retry-interval"));
-        if (config.containsKey("support-mq-extensions"))
-            adapter.setSupportMQExtensions(config.get("support-mq-extensions"));
-        if (config.containsKey("trace-enabled"))
-            adapter.setTraceEnabled(config.get("trace-enabled"));
-        if (config.containsKey("trace-level"))
-            adapter.setTraceLevel(config.get("trace-level"));
+        for (Map.Entry<String, String> entry : config.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            switch (key) {
+                case "log-writer-enabled" -> adapter.setLogWriterEnabled(value);
+                case "max-connections" -> adapter.setMaxConnections(value);
+                case "native-library-path" -> adapter.setNativeLibraryPath(value);
+                case "reconnection-retry-count" -> adapter.setReconnectionRetryCount(value);
+                case "reconnection-retry-interval" -> adapter.setReconnectionRetryInterval(value);
+                case "startup-retry-count" -> adapter.setStartupRetryCount(value);
+                case "startup-retry-interval" -> adapter.setStartupRetryInterval(value);
+                case "support-mq-extensions" -> adapter.setSupportMQExtensions(value);
+                case "trace-enabled" -> adapter.setTraceEnabled(value);
+                case "trace-level" -> adapter.setTraceLevel(value);
+            }
+        }
         return new ResourceAdapterWrapper(adapter, config);
     }
 
@@ -73,116 +73,68 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         ManagedConnectionFactoryImpl factory = new ManagedConnectionFactoryImpl();
         factory.setResourceAdapter(wrapper.delegate);
         Map<String, String> config = new HashMap<>(wrapper.config);
-        if (config.containsKey("application-name"))
-            factory.setApplicationName(config.get("application-name"));
-        if (config.containsKey("arbitrary-properties"))
-            factory.setArbitraryProperties(config.get("arbitrary-properties"));
-        if (config.containsKey("broker-cc-sub-queue"))
-            factory.setBrokerCCSubQueue(config.get("broker-cc-sub-queue"));
-        if (config.containsKey("broker-control-queue"))
-            factory.setBrokerControlQueue(config.get("broker-control-queue"));
-        if (config.containsKey("broker-pub-queue"))
-            factory.setBrokerPubQueue(config.get("broker-pub-queue"));
-        if (config.containsKey("broker-queue-manager"))
-            factory.setBrokerQueueManager(config.get("broker-queue-manager"));
-        if (config.containsKey("broker-sub-queue"))
-            factory.setBrokerSubQueue(config.get("broker-sub-queue"));
-        if (config.containsKey("broker-version"))
-            factory.setBrokerVersion(config.get("broker-version"));
-        if (config.containsKey("ccdt-url"))
-            factory.setCcdtURL(config.get("ccdt-url"));
-        if (config.containsKey("ccsid"))
-            factory.setCCSID(config.get("ccsid"));
-        if (config.containsKey("channel"))
-            factory.setChannel(config.get("channel"));
-        if (config.containsKey("cleanup-interval"))
-            factory.setCleanupInterval(config.get("cleanup-interval"));
-        if (config.containsKey("cleanup-level"))
-            factory.setCleanupLevel(config.get("cleanup-level"));
-        if (config.containsKey("client-id"))
-            factory.setClientId(config.get("client-id"));
-        if (config.containsKey("clone-support"))
-            factory.setCloneSupport(config.get("clone-support"));
-        if (config.containsKey("connection-name-list"))
-            factory.setConnectionNameList(config.get("connection-name-list"));
-        if (config.containsKey("fail-if-quiesce"))
-            factory.setFailIfQuiesce(config.get("fail-if-quiesce"));
-        if (config.containsKey("header-compression"))
-            factory.setHeaderCompression(config.get("header-compression"));
-        if (config.containsKey("host-name"))
-            factory.setHostName(config.get("host-name"));
-        if (config.containsKey("local-address"))
-            factory.setLocalAddress(config.get("local-address"));
-        if (config.containsKey("message-compression"))
-            factory.setMessageCompression(config.get("message-compression"));
-        if (config.containsKey("message-selection"))
-            factory.setMessageSelection(config.get("message-selection"));
-        if (config.containsKey("password"))
-            factory.setPassword(config.get("password"));
-        if (config.containsKey("polling-interval"))
-            factory.setPollingInterval(config.get("polling-interval"));
-        if (config.containsKey("port"))
-            factory.setPort(config.get("port"));
-        if (config.containsKey("provider-version"))
-            factory.setProviderVersion(config.get("provider-version"));
-        if (config.containsKey("pub-ack-interval"))
-            factory.setPubAckInterval(config.get("pub-ack-interval"));
-        if (config.containsKey("put-async-allowed"))
-            factory.setPutAsyncAllowed(config.get("put-async-allowed"));
-        if (config.containsKey("queue-manager"))
-            factory.setQueueManager(config.get("queue-manager"));
-        if (config.containsKey("read-ahead-allowed"))
-            factory.setReadAheadAllowed(config.get("read-ahead-allowed"));
-        if (config.containsKey("receive-exit"))
-            factory.setReceiveExit(config.get("receive-exit"));
-        if (config.containsKey("receive-exit-init"))
-            factory.setReceiveExitInit(config.get("receive-exit-init"));
-        if (config.containsKey("rescan-interval"))
-            factory.setRescanInterval(config.get("rescan-interval"));
-        if (config.containsKey("security-exit"))
-            factory.setSecurityExit(config.get("security-exit"));
-        if (config.containsKey("security-exit-init"))
-            factory.setSecurityExitInit(config.get("security-exit-init"));
-        if (config.containsKey("send-check-count"))
-            factory.setSendCheckCount(config.get("send-check-count"));
-        if (config.containsKey("send-exit"))
-            factory.setSendExit(config.get("send-exit"));
-        if (config.containsKey("send-exit-init"))
-            factory.setSendExitInit(config.get("send-exit-init"));
-        if (config.containsKey("share-conv-allowed"))
-            factory.setShareConvAllowed(config.get("share-conv-allowed"));
-        if (config.containsKey("sparse-subscriptions"))
-            factory.setSparseSubscriptions(config.get("sparse-subscriptions"));
-        if (config.containsKey("ssl-cert-stores"))
-            factory.setSslCertStores(config.get("ssl-cert-stores"));
-        if (config.containsKey("ssl-cipher-suite"))
-            factory.setSslCipherSuite(config.get("ssl-cipher-suite"));
-        if (config.containsKey("ssl-fips-required"))
-            factory.setSslFipsRequired(config.get("ssl-fips-required"));
-        if (config.containsKey("ssl-peer-name"))
-            factory.setSslPeerName(config.get("ssl-peer-name"));
-        if (config.containsKey("ssl-reset-count"))
-            factory.setSslResetCount(config.get("ssl-reset-count"));
-        if (config.containsKey("ssl-socket-factory"))
-            factory.setSslSocketFactory(config.get("ssl-socket-factory"));
-        if (config.containsKey("status-refresh-interval"))
-            factory.setStatusRefreshInterval(config.get("status-refresh-interval"));
-        if (config.containsKey("subscription-store"))
-            factory.setSubscriptionStore(config.get("subscription-store"));
-        if (config.containsKey("target-client-matching"))
-            factory.setTargetClientMatching(config.get("target-client-matching"));
-        if (config.containsKey("temp-q-prefix"))
-            factory.setTempQPrefix(config.get("temp-q-prefix"));
-        if (config.containsKey("temp-topic-prefix"))
-            factory.setTempTopicPrefix(config.get("temp-topic-prefix"));
-        if (config.containsKey("temporary-model"))
-            factory.setTemporaryModel(config.get("temporary-model"));
-        if (config.containsKey("transport-type"))
-            factory.setTransportType(config.get("transport-type"));
-        if (config.containsKey("username"))
-            factory.setUserName(config.get("username"));
-        if (config.containsKey("wildcard-format"))
-            factory.setWildcardFormat(config.get("wildcard-format"));
+        for (Map.Entry<String, String> entry : config.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            switch (key) {
+                case "application-name" -> factory.setApplicationName(value);
+                case "arbitrary-properties" -> factory.setArbitraryProperties(value);
+                case "broker-cc-sub-queue" -> factory.setBrokerCCSubQueue(value);
+                case "broker-control-queue" -> factory.setBrokerControlQueue(value);
+                case "broker-pub-queue" -> factory.setBrokerPubQueue(value);
+                case "broker-queue-manager" -> factory.setBrokerQueueManager(value);
+                case "broker-sub-queue" -> factory.setBrokerSubQueue(value);
+                case "broker-version" -> factory.setBrokerVersion(value);
+                case "ccdt-url" -> factory.setCcdtURL(value);
+                case "ccsid" -> factory.setCCSID(value);
+                case "channel" -> factory.setChannel(value);
+                case "cleanup-interval" -> factory.setCleanupInterval(value);
+                case "cleanup-level" -> factory.setCleanupLevel(value);
+                case "client-id" -> factory.setClientId(value);
+                case "clone-support" -> factory.setCloneSupport(value);
+                case "connection-name-list" -> factory.setConnectionNameList(value);
+                case "fail-if-quiesce" -> factory.setFailIfQuiesce(value);
+                case "header-compression" -> factory.setHeaderCompression(value);
+                case "host-name" -> factory.setHostName(value);
+                case "local-address" -> factory.setLocalAddress(value);
+                case "message-compression" -> factory.setMessageCompression(value);
+                case "message-selection" -> factory.setMessageSelection(value);
+                case "password" -> factory.setPassword(value);
+                case "polling-interval" -> factory.setPollingInterval(value);
+                case "port" -> factory.setPort(value);
+                case "provider-version" -> factory.setProviderVersion(value);
+                case "pub-ack-interval" -> factory.setPubAckInterval(value);
+                case "put-async-allowed" -> factory.setPutAsyncAllowed(value);
+                case "queue-manager" -> factory.setQueueManager(value);
+                case "read-ahead-allowed" -> factory.setReadAheadAllowed(value);
+                case "receive-exit" -> factory.setReceiveExit(value);
+                case "receive-exit-init" -> factory.setReceiveExitInit(value);
+                case "rescan-interval" -> factory.setRescanInterval(value);
+                case "security-exit" -> factory.setSecurityExit(value);
+                case "security-exit-init" -> factory.setSecurityExitInit(value);
+                case "send-check-count" -> factory.setSendCheckCount(value);
+                case "send-exit" -> factory.setSendExit(value);
+                case "send-exit-init" -> factory.setSendExitInit(value);
+                case "share-conv-allowed" -> factory.setShareConvAllowed(value);
+                case "sparse-subscriptions" -> factory.setSparseSubscriptions(value);
+                case "ssl-cert-stores" -> factory.setSslCertStores(value);
+                case "ssl-cipher-suite" -> factory.setSslCipherSuite(value);
+                case "ssl-fips-required" -> factory.setSslFipsRequired(value);
+                case "ssl-peer-name" -> factory.setSslPeerName(value);
+                case "ssl-reset-count" -> factory.setSslResetCount(value);
+                case "ssl-socket-factory" -> factory.setSslSocketFactory(value);
+                case "status-refresh-interval" -> factory.setStatusRefreshInterval(value);
+                case "subscription-store" -> factory.setSubscriptionStore(value);
+                case "target-client-matching" -> factory.setTargetClientMatching(value);
+                case "temp-q-prefix" -> factory.setTempQPrefix(value);
+                case "temp-topic-prefix" -> factory.setTempTopicPrefix(value);
+                case "temporary-model" -> factory.setTemporaryModel(value);
+                case "transport-type" -> factory.setTransportType(value);
+                case "username" -> factory.setUserName(value);
+                case "wildcard-format" -> factory.setWildcardFormat(value);
+                default -> log.warnf("Unknown property: %s", key);
+            }
+        }
         return factory;
     }
 
@@ -194,80 +146,56 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
         ActivationSpecImpl activationSpec = new ActivationSpecImpl();
         activationSpec.setResourceAdapter(wrapper.delegate);
         activationSpec.setUseJNDI(false);
-
-        if (config.containsKey("acknowledge-mode"))
-            activationSpec.setAcknowledgeMode(config.get("acknowledge-mode"));
-        if (mergedConfig.containsKey("application-name"))
-            activationSpec.setApplicationName(mergedConfig.get("application-name"));
-        if (config.containsKey("arbitrary-properties"))
-            activationSpec.setArbitraryProperties(config.get("arbitrary-properties"));
-        if (mergedConfig.containsKey("ccdt-url"))
-            activationSpec.setCcdtURL(mergedConfig.get("ccdt-url"));
-        if (mergedConfig.containsKey("ccsid"))
-            activationSpec.setCCSID(mergedConfig.get("ccsid"));
-        if (mergedConfig.containsKey("channel"))
-            activationSpec.setChannel(mergedConfig.get("channel"));
-        if (mergedConfig.containsKey("client-id"))
-            activationSpec.setClientId(mergedConfig.get("client-id"));
-        if (mergedConfig.containsKey("connection-name-list"))
-            activationSpec.setConnectionNameList(mergedConfig.get("connection-name-list"));
-        if (config.containsKey("destination"))
-            activationSpec.setDestination(config.get("destination"));
-        if (config.containsKey("destination-type"))
-            activationSpec.setDestinationType(config.get("destination-type"));
-        if (config.containsKey("dynamically-balanced"))
-            activationSpec.setDynamicallyBalanced(mergedConfig.get("dynamically-balanced"));
-        if (mergedConfig.containsKey("header-compression"))
-            activationSpec.setHeaderCompression(mergedConfig.get("header-compression"));
-        if (mergedConfig.containsKey("host-name"))
-            activationSpec.setHostName(mergedConfig.get("host-name"));
-        if (mergedConfig.containsKey("local-address"))
-            activationSpec.setLocalAddress(mergedConfig.get("local-address"));
-        if (config.containsKey("max-sequential-delivery-failures"))
-            activationSpec.setMaxSequentialDeliveryFailures(Integer.parseInt(config.get("max-sequential-delivery-failures")));
-        if (mergedConfig.containsKey("message-compression"))
-            activationSpec.setMessageCompression(mergedConfig.get("message-compression"));
-        if (mergedConfig.containsKey("message-selection"))
-            activationSpec.setMessageSelection(mergedConfig.get("message-selection"));
-        if (mergedConfig.containsKey("password"))
-            activationSpec.setPassword(mergedConfig.get("password"));
-        if (mergedConfig.containsKey("polling-interval"))
-            activationSpec.setPollingInterval(mergedConfig.get("polling-interval"));
-        if (mergedConfig.containsKey("port"))
-            activationSpec.setPort(mergedConfig.get("port"));
-        if (mergedConfig.containsKey("provider-version"))
-            activationSpec.setProviderVersion(mergedConfig.get("provider-version"));
-        if (mergedConfig.containsKey("queue-manager"))
-            activationSpec.setQueueManager(mergedConfig.get("queue-manager"));
-        if (mergedConfig.containsKey("receive-exit"))
-            activationSpec.setReceiveExit(mergedConfig.get("receive-exit"));
-        if (mergedConfig.containsKey("receive-exit-init"))
-            activationSpec.setReceiveExitInit(mergedConfig.get("receive-exit-init"));
-        if (mergedConfig.containsKey("security-exit"))
-            activationSpec.setSecurityExit(mergedConfig.get("security-exit"));
-        if (mergedConfig.containsKey("security-exit-init"))
-            activationSpec.setSecurityExitInit(mergedConfig.get("security-exit-init"));
-        if (mergedConfig.containsKey("send-exit"))
-            activationSpec.setSendExit(mergedConfig.get("send-exit"));
-        if (mergedConfig.containsKey("send-exit-init"))
-            activationSpec.setSendExitInit(mergedConfig.get("send-exit-init"));
-        if (mergedConfig.containsKey("ssl-cert-stores"))
-            activationSpec.setSslCertStores(mergedConfig.get("ssl-cert-stores"));
-        if (mergedConfig.containsKey("ssl-cipher-suite"))
-            activationSpec.setSslCipherSuite(mergedConfig.get("ssl-cipher-suite"));
-        if (mergedConfig.containsKey("ssl-fips-required"))
-            activationSpec.setSslFipsRequired(mergedConfig.get("ssl-fips-required"));
-        if (mergedConfig.containsKey("ssl-peer-name"))
-            activationSpec.setSslPeerName(mergedConfig.get("ssl-peer-name"));
-        if (mergedConfig.containsKey("ssl-reset-count"))
-            activationSpec.setSslResetCount(mergedConfig.get("ssl-reset-count"));
-        if (mergedConfig.containsKey("ssl-socket-factory"))
-            activationSpec.setSslSocketFactory(mergedConfig.get("ssl-socket-factory"));
-        if (mergedConfig.containsKey("transport-type"))
-            activationSpec.setTransportType(mergedConfig.get("transport-type"));
-        if (mergedConfig.containsKey("username"))
-            activationSpec.setUserName(mergedConfig.get("username"));
-
+        for (Map.Entry<String, String> entry : mergedConfig.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            switch (key) {
+                case "acknowledge-mode" -> activationSpec.setAcknowledgeMode(value);
+                case "application-name" -> activationSpec.setApplicationName(value);
+                case "arbitrary-properties" -> activationSpec.setArbitraryProperties(value);
+                case "ccdt-url" -> activationSpec.setCcdtURL(value);
+                case "ccsid" -> activationSpec.setCCSID(value);
+                case "channel" -> activationSpec.setChannel(value);
+                case "client-id" -> activationSpec.setClientId(value);
+                case "connection-name-list" -> activationSpec.setConnectionNameList(value);
+                case "destination" -> activationSpec.setDestination(value);
+                case "destination-type" -> activationSpec.setDestinationType(value);
+                case "dynamically-balanced" -> activationSpec.setDynamicallyBalanced(value);
+                case "header-compression" -> activationSpec.setHeaderCompression(value);
+                case "host-name" -> activationSpec.setHostName(value);
+                case "local-address" -> activationSpec.setLocalAddress(value);
+                case "max-sequential-delivery-failures" ->
+                    activationSpec.setMaxSequentialDeliveryFailures(Integer.parseInt(value));
+                case "message-compression" -> activationSpec.setMessageCompression(value);
+                case "message-selection" -> activationSpec.setMessageSelection(value);
+                case "password" -> activationSpec.setPassword(value);
+                case "polling-interval" -> activationSpec.setPollingInterval(value);
+                case "port" -> activationSpec.setPort(value);
+                case "provider-version" -> activationSpec.setProviderVersion(value);
+                case "queue-manager" -> activationSpec.setQueueManager(value);
+                case "receive-exit" -> activationSpec.setReceiveExit(value);
+                case "receive-exit-init" -> activationSpec.setReceiveExitInit(value);
+                case "rescan-interval" -> activationSpec.setRescanInterval(value);
+                case "security-exit" -> activationSpec.setSecurityExit(value);
+                case "security-exit-init" -> activationSpec.setSecurityExitInit(value);
+                case "send-exit" -> activationSpec.setSendExit(value);
+                case "send-exit-init" -> activationSpec.setSendExitInit(value);
+                case "share-conv-allowed" -> activationSpec.setShareConvAllowed(value);
+                case "sparse-subscriptions" -> activationSpec.setSparseSubscriptions(value);
+                case "ssl-cert-stores" -> activationSpec.setSslCertStores(value);
+                case "ssl-cipher-suite" -> activationSpec.setSslCipherSuite(value);
+                case "ssl-fips-required" -> activationSpec.setSslFipsRequired(value);
+                case "ssl-peer-name" -> activationSpec.setSslPeerName(value);
+                case "ssl-reset-count" -> activationSpec.setSslResetCount(value);
+                case "ssl-socket-factory" -> activationSpec.setSslSocketFactory(value);
+                case "status-refresh-interval" -> activationSpec.setStatusRefreshInterval(value);
+                case "subscription-store" -> activationSpec.setSubscriptionStore(value);
+                case "target-client-matching" -> activationSpec.setTargetClientMatching(value);
+                case "transport-type" -> activationSpec.setTransportType(value);
+                case "username" -> activationSpec.setUserName(value);
+                case "wildcard-format" -> activationSpec.setWildcardFormat(value);
+            }
+        }
         return activationSpec;
     }
 
