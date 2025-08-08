@@ -19,6 +19,7 @@ package io.quarkiverse.ibm.mq.it;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSConsumer;
 import jakarta.jms.JMSContext;
 import jakarta.jms.JMSException;
 import jakarta.jms.Queue;
@@ -45,5 +46,15 @@ public class IbmMqResource {
             throw new RuntimeException(e);
         }
         return "Hello ibm-mq";
+    }
+
+    @GET
+    @Path("/receive")
+    public String receive() {
+        try (JMSContext context = connectionFactory.createContext()) {
+            Queue queue = context.createQueue("DEV.QUEUE.2");
+            JMSConsumer consumer = context.createConsumer(queue);
+            return consumer.receiveBodyNoWait(String.class);
+        }
     }
 }
