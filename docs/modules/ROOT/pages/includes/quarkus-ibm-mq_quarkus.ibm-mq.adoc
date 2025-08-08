@@ -68,7 +68,7 @@ Environment variable: `+++QUARKUS_IBM_MQ_DEVSERVICES_LOGS_ENABLED+++`
 endif::add-copy-button-to-env-var[]
 --
 |boolean
-|`true`
+|`false`
 
 |===
 

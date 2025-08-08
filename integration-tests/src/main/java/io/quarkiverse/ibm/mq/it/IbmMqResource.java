@@ -54,7 +54,7 @@ public class IbmMqResource {
         try (JMSContext context = connectionFactory.createContext()) {
             Queue queue = context.createQueue("DEV.QUEUE.2");
             JMSConsumer consumer = context.createConsumer(queue);
-            return consumer.receiveBodyNoWait(String.class);
+            return consumer.receiveBody(String.class, 2000L);
         }
     }
 }
