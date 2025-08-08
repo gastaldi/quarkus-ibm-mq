@@ -3,7 +3,6 @@ package io.quarkiverse.ibm.mq.deployment;
 import java.util.Map;
 
 import org.jboss.logging.Logger;
-import org.testcontainers.containers.Network;
 
 import com.ibm.mq.MQJavaComponent;
 import com.ibm.mq.jakarta.jms.MQJMSComponent;
@@ -58,7 +57,9 @@ class IbmMqProcessor {
     public DevServicesResultBuildItem createContainer(IbmMqBuildTimeConfig buildTimeConfig) {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
-                .withNetwork(Network.SHARED)
+                .withWebServer()
+                .withEnv("MQ_ADMIN_PASSWORD", "admin")
+                .withEnv("MQ_APP_PASSWORD", "app")
                 .withLogConsumer(new JBossLoggingConsumer(logger))
                 .withCreateContainerCmdModifier(cmd -> cmd.withPlatform("linux/amd64"));
 
@@ -72,7 +73,8 @@ class IbmMqProcessor {
                 "ibm-mq.app-user", container.getAppUser(),
                 "ibm-mq.app-password", container.getAppPassword(),
                 "ibm-mq.channel", container.getChannel(),
-                "ibm-mq.queue-manager", container.getQueueManager());
+                "ibm-mq.queue-manager", container.getQueueManager(),
+                "ibm-mq.webserver.port", String.valueOf(container.getWebServerPort()));
 
         return DevServicesResultBuildItem.discovered()
                 .containerId(container.getContainerId())
