@@ -22,6 +22,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.dev.devservices.DevServicesConfig;
 import io.quarkus.devservices.common.JBossLoggingConsumer;
 
@@ -49,6 +50,14 @@ class IbmMqProcessor {
                 MQJMSComponent.class,
                 JMSComponent.class,
                 WMQComponent.class).constructors().methods().fields().build());
+    }
+
+    @BuildStep
+    void runtimeInitialized(BuildProducer<RuntimeInitializedClassBuildItem> producer) {
+        producer.produce(new RuntimeInitializedClassBuildItem(
+                "com.ibm.msg.client.commonservices.workqueue.WorkQueueManager"));
+        producer.produce(new RuntimeInitializedClassBuildItem(
+                "com.ibm.msg.client.commonservices.j2se.workqueue.WorkQueueManagerImplementation"));
     }
 
     @SuppressWarnings("resource")
