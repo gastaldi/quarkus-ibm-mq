@@ -34,6 +34,22 @@ public interface IbmMqBuildTimeConfig {
         @WithDefault("true")
         boolean enabled();
 
+        /**
+         * Indicates if the IBM MQ Series Web Server UI should be enabled
+         *
+         * @return true if the Web Server UI should be enabled for this
+         */
+        @WithDefault("true")
+        boolean webServerEnabled();
+
+        /**
+         * Indicates if we should log any output from the IBM MQ Container
+         *
+         * @return true if we should output the container's log
+         */
+        @WithDefault("false")
+        boolean logsEnabled();
+
         final class Enabled implements BooleanSupplier {
             final IbmMqBuildTimeConfig config;
 

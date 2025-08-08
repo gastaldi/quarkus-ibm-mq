@@ -52,17 +52,22 @@ class IbmMqProcessor {
     }
 
     @SuppressWarnings("resource")
-    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = { DevServicesConfig.Enabled.class,
-            IbmMqBuildTimeConfig.DevServicesConfig.Enabled.class })
+    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = {DevServicesConfig.Enabled.class,
+            IbmMqBuildTimeConfig.DevServicesConfig.Enabled.class})
     public DevServicesResultBuildItem createContainer(IbmMqBuildTimeConfig buildTimeConfig) {
         MQContainer container = new MQContainer(MQContainer.DEFAULT_IMAGE)
                 .acceptLicense()
-                .withWebServer()
+                // Setting these environment variables are the only way to make authentication work
                 .withEnv("MQ_ADMIN_PASSWORD", "admin")
                 .withEnv("MQ_APP_PASSWORD", "app")
-                .withLogConsumer(new JBossLoggingConsumer(logger))
                 .withCreateContainerCmdModifier(cmd -> cmd.withPlatform("linux/amd64"));
 
+        if (buildTimeConfig.devservices().webServerEnabled()) {
+            container.withWebServer();
+        }
+        if (buildTimeConfig.devservices().logsEnabled()) {
+            container.withLogConsumer(new JBossLoggingConsumer(logger));
+        }
         container.start();
 
         Map<String, String> configOverrides = Map.of(
