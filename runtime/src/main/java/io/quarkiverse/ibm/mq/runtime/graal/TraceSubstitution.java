@@ -8,12 +8,14 @@ import com.ibm.msg.client.commonservices.trace.DumpableComponent;
 import com.ibm.msg.client.commonservices.trace.DumpableObject;
 import com.ibm.msg.client.commonservices.trace.Trace;
 import com.ibm.msg.client.commonservices.trace.TraceFFSTInfo;
+import com.oracle.svm.core.annotate.KeepOriginal;
 import com.oracle.svm.core.annotate.RecomputeFieldValue;
 import com.oracle.svm.core.annotate.Substitute;
 import com.oracle.svm.core.annotate.TargetClass;
 
 @Substitute
 @TargetClass(Trace.class)
+@KeepOriginal
 public final class TraceSubstitution {
     @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.Reset)
     public static PrintStream errorStream;
