@@ -27,7 +27,7 @@
 
     <properties>
         <ibm.mq.version>9.4.3.0</ibm.mq.version>
-        <quarkus.version>3.25.1</quarkus.version>
+        <quarkus.version>3.26.2</quarkus.version>
         <quarkus-ironjacamar.version>1.6.1</quarkus-ironjacamar.version>
     </properties>
 
