@@ -42,7 +42,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
 
     @Override
     public String getProductVersion() {
-        return "9.4.3.1";
+        return "9.4.4.1";
     }
 
     @Override
