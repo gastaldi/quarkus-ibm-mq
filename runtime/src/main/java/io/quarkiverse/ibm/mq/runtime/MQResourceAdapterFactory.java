@@ -168,6 +168,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
                     activationSpec.setMaxSequentialDeliveryFailures(Integer.parseInt(value));
                 case "message-compression" -> activationSpec.setMessageCompression(value);
                 case "message-selection" -> activationSpec.setMessageSelection(value);
+                case "message-selector" -> activationSpec.setMessageSelector(value);
                 case "password" -> activationSpec.setPassword(value);
                 case "polling-interval" -> activationSpec.setPollingInterval(value);
                 case "port" -> activationSpec.setPort(value);
