@@ -35,6 +35,12 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
 
     private static final Logger log = Logger.getLogger(MQResourceAdapterFactory.class);
 
+    private static volatile String productVersion;
+
+    static void setProductVersion(String version) {
+        productVersion = version;
+    }
+
     @Override
     public String getProductName() {
         return "IBM MQ Resource Adapter";
@@ -42,7 +48,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
 
     @Override
     public String getProductVersion() {
-        return "9.4.4.1";
+        return productVersion;
     }
 
     @Override

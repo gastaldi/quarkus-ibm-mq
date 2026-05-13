@@ -11,8 +11,11 @@ import java.util.zip.ZipFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.quarkiverse.ibm.mq.runtime.MQRecorder;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.annotations.ExecutionTime;
+import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.GeneratedClassBuildItem;
 import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
@@ -38,18 +41,23 @@ class IbmMqRarExtractorProcessor {
     private static final Logger log = LoggerFactory.getLogger(IbmMqRarExtractorProcessor.class);
 
     @BuildStep
+    @Record(ExecutionTime.STATIC_INIT)
     void extractConnectorJarFromRar(
+            MQRecorder recorder,
             CurateOutcomeBuildItem curateOutcome,
             BuildProducer<GeneratedClassBuildItem> generatedClasses,
             BuildProducer<GeneratedResourceBuildItem> generatedResources) throws IOException {
 
-        Path rarPath = findRarPath(curateOutcome);
-        if (rarPath == null) {
+        ResolvedDependency rarDep = findRarDependency(curateOutcome);
+        if (rarDep == null) {
             throw new IllegalStateException(
                     "Could not find resolved artifact " + RAR_GROUP_ID + ":" + RAR_ARTIFACT_ID
                             + " (type=rar) in the dependency tree. "
                             + "Make sure it is declared as a dependency in the deployment module.");
         }
+
+        Path rarPath = rarDep.getResolvedPaths().iterator().next();
+        recorder.setProductVersion(rarDep.getVersion());
 
         try (ZipFile rar = new ZipFile(rarPath.toFile())) {
             ZipEntry connectorEntry = rar.getEntry(CONNECTOR_JAR_NAME);
@@ -88,15 +96,11 @@ class IbmMqRarExtractorProcessor {
         }
     }
 
-    /**
-     * Walks the resolved dependencies from the Quarkus application model and returns
-     * the local filesystem path of the RAR artifact.
-     */
-    private Path findRarPath(CurateOutcomeBuildItem curateOutcome) {
+    private ResolvedDependency findRarDependency(CurateOutcomeBuildItem curateOutcome) {
         for (ResolvedDependency dep : curateOutcome.getApplicationModel().getDependencies()) {
             if (RAR_GROUP_ID.equals(dep.getGroupId())
                     && RAR_ARTIFACT_ID.equals(dep.getArtifactId())) {
-                return dep.getResolvedPaths().iterator().next();
+                return dep;
             }
         }
         return null;
