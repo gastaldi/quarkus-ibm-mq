@@ -7,7 +7,7 @@ h|[.header-title]##Configuration property##
 h|Type
 h|Default
 
-a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-enabled[`quarkus.ibm-mq.devservices.enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-enabled[`+++quarkus.ibm-mq.devservices.enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.ibm-mq.devservices.enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -28,7 +28,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-web-server-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-web-server-enabled[`quarkus.ibm-mq.devservices.web-server-enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-web-server-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-web-server-enabled[`+++quarkus.ibm-mq.devservices.web-server-enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.ibm-mq.devservices.web-server-enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -49,7 +49,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-logs-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-logs-enabled[`quarkus.ibm-mq.devservices.logs-enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-ibm-mq_quarkus-ibm-mq-devservices-logs-enabled]] [.property-path]##link:#quarkus-ibm-mq_quarkus-ibm-mq-devservices-logs-enabled[`+++quarkus.ibm-mq.devservices.logs-enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.ibm-mq.devservices.logs-enabled+++[]
 endif::add-copy-button-to-config-props[]

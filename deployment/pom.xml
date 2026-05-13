@@ -12,6 +12,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.ibm.mq</groupId>
+            <artifactId>wmq.jakarta.jmsra</artifactId>
+            <type>rar</type>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc-deployment</artifactId>
         </dependency>
@@ -36,7 +41,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5-internal</artifactId>
+            <artifactId>quarkus-junit-internal</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -27,6 +27,7 @@
         <dependency>
             <groupId>com.ibm.mq</groupId>
             <artifactId>com.ibm.mq.jakarta.connector</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
