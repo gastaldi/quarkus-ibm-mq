@@ -2,12 +2,15 @@ package io.quarkiverse.ibm.mq.runtime.graal;
 
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.ibm.msg.client.commonservices.CSIException;
+import com.ibm.msg.client.commonservices.SecretsConstants;
 import com.ibm.msg.client.commonservices.trace.DumpableComponent;
 import com.ibm.msg.client.commonservices.trace.DumpableObject;
 import com.ibm.msg.client.commonservices.trace.Trace;
 import com.ibm.msg.client.commonservices.trace.TraceFFSTInfo;
+import com.oracle.svm.core.annotate.Alias;
 import com.oracle.svm.core.annotate.KeepOriginal;
 import com.oracle.svm.core.annotate.RecomputeFieldValue;
 import com.oracle.svm.core.annotate.Substitute;
@@ -19,6 +22,10 @@ import com.oracle.svm.core.annotate.TargetClass;
 public final class TraceSubstitution {
     @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.Reset)
     public static PrintStream errorStream;
+
+    @Alias
+    @RecomputeFieldValue(kind = RecomputeFieldValue.Kind.FromAlias)
+    public static Set<String> PROPERTIES_TO_SANITIZE = SecretsConstants.getAllKeys();
 
     @Substitute
     public static boolean isOn = false;
