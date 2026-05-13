@@ -164,13 +164,18 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
                 case "header-compression" -> activationSpec.setHeaderCompression(value);
                 case "host-name" -> activationSpec.setHostName(value);
                 case "local-address" -> activationSpec.setLocalAddress(value);
+                case "max-messages" -> activationSpec.setMaxMessages(Integer.parseInt(value));
+                case "max-pool-depth" -> activationSpec.setMaxPoolDepth(Integer.parseInt(value));
                 case "max-sequential-delivery-failures" ->
                     activationSpec.setMaxSequentialDeliveryFailures(Integer.parseInt(value));
+                case "message-batch-size" -> activationSpec.setMessageBatchSize(Integer.parseInt(value));
                 case "message-compression" -> activationSpec.setMessageCompression(value);
+                case "message-retention" -> activationSpec.setMessageRetention(value);
                 case "message-selection" -> activationSpec.setMessageSelection(value);
                 case "message-selector" -> activationSpec.setMessageSelector(value);
                 case "password" -> activationSpec.setPassword(value);
                 case "polling-interval" -> activationSpec.setPollingInterval(value);
+                case "pool-timeout" -> activationSpec.setPoolTimeout(Integer.parseInt(value));
                 case "port" -> activationSpec.setPort(value);
                 case "provider-version" -> activationSpec.setProviderVersion(value);
                 case "queue-manager" -> activationSpec.setQueueManager(value);
@@ -189,6 +194,7 @@ public class MQResourceAdapterFactory implements ResourceAdapterFactory {
                 case "ssl-peer-name" -> activationSpec.setSslPeerName(value);
                 case "ssl-reset-count" -> activationSpec.setSslResetCount(value);
                 case "ssl-socket-factory" -> activationSpec.setSslSocketFactory(value);
+                case "start-timeout" -> activationSpec.setStartTimeout(Integer.parseInt(value));
                 case "status-refresh-interval" -> activationSpec.setStatusRefreshInterval(value);
                 case "subscription-store" -> activationSpec.setSubscriptionStore(value);
                 case "target-client-matching" -> activationSpec.setTargetClientMatching(value);
