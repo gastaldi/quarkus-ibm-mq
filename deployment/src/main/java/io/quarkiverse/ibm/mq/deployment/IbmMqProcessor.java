@@ -74,6 +74,10 @@ class IbmMqProcessor {
                 "com.ibm.msg.client.commonservices.workqueue.WorkQueueManager"));
         producer.produce(new RuntimeInitializedClassBuildItem(
                 "com.ibm.msg.client.commonservices.j2se.workqueue.WorkQueueManagerImplementation"));
+        // Static initialization of Trace.PROPERTIES_TO_SANITIZE cannot be folded by the
+        // native-image points-to analysis; defer its <clinit> to runtime.
+        producer.produce(new RuntimeInitializedClassBuildItem(
+                "com.ibm.msg.client.commonservices.trace.Trace"));
     }
 
     @SuppressWarnings("resource")
