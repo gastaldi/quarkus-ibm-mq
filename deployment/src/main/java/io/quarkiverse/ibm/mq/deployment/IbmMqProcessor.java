@@ -60,13 +60,12 @@ class IbmMqProcessor {
     @BuildStep
     @Record(ExecutionTime.STATIC_INIT)
     void recordProductVersion(MQResourceAdapterRecorder recorder, CurateOutcomeBuildItem curated) {
-        String version = curated.getApplicationModel().getDependencies().stream()
+        curated.getApplicationModel().getDependencies().stream()
                 .filter(d -> "com.ibm.mq".equals(d.getGroupId())
                         && "com.ibm.mq.jakarta.connector".equals(d.getArtifactId()))
                 .map(ResolvedDependency::getVersion)
                 .findFirst()
-                .orElse("unknown");
-        recorder.setProductVersion(version);
+                .ifPresent(recorder::setProductVersion);
     }
 
     @BuildStep
