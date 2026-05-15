@@ -90,18 +90,24 @@ class IbmMqProcessor {
                 "META-INF/jmqiCharsets.dat",
                 "META-INF/jmqiversion.properties",
                 "META-INF/product.properties"));
-        for (String bundle : new String[] {
-                "com.ibm.mq.ese.nls.AMS_MessageResourceBundle",
-                "com.ibm.mq.jakarta.jms.admin.resources.JMSADM_MessageResourceBundle",
-                "com.ibm.mq.jakarta.jms.resources.JMSMQ_MessageResourceBundle",
-                "com.ibm.msg.client.commonservices.resources.JMSCS_MessageResourceBundle",
-                "com.ibm.msg.client.jakarta.jms.internal.resources.JMSCC_MessageResourceBundle",
-                "com.ibm.msg.client.jakarta.wmq.common.internal.resources.JMSCMQ_MessageResourceBundle",
-                "com.ibm.msg.client.jakarta.wmq.compat.jms.internal.services.resources.MQJMS_MessageResourceBundle",
-                "com.ibm.msg.client.jakarta.wmq.factories.resources.JMSFMQ_MessageResourceBundle",
-                "com.ibm.msg.client.jakarta.wmq.internal.resources.JMSWMQ_MessageResourceBundle" }) {
-            bundles.produce(new NativeImageResourceBundleBuildItem(bundle));
-        }
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.mq.ese.nls.AMS_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.mq.jakarta.jms.admin.resources.JMSADM_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.mq.jakarta.jms.resources.JMSMQ_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.commonservices.resources.JMSCS_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.jakarta.jms.internal.resources.JMSCC_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.jakarta.wmq.common.internal.resources.JMSCMQ_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.jakarta.wmq.compat.jms.internal.services.resources.MQJMS_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.jakarta.wmq.factories.resources.JMSFMQ_MessageResourceBundle"));
+        bundles.produce(new NativeImageResourceBundleBuildItem(
+                "com.ibm.msg.client.jakarta.wmq.internal.resources.JMSWMQ_MessageResourceBundle"));
     }
 
     @SuppressWarnings("resource")
