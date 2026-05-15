@@ -2,6 +2,7 @@ package io.quarkiverse.ibm.mq.runtime.graal;
 
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.ibm.msg.client.commonservices.CSIException;
 import com.ibm.msg.client.commonservices.trace.DumpableComponent;
@@ -279,5 +280,20 @@ public final class TraceSubstitution {
     @Substitute
     private static void addPackageListToTree(String packageList, boolean included) {
 
+    }
+
+    @Substitute
+    public static Object sanitize(Object key, Object value) {
+        return value;
+    }
+
+    @Substitute
+    public static Map<Object, Object> sanitizeMap(Map<?, ?> map) {
+        return new HashMap<>(map);
+    }
+
+    @Substitute
+    public static Map<Object, Object> sanitizeMap(Map<?, ?> map, Trace.CaseInsensitiveMap caseInsensitiveMap) {
+        return new HashMap<>(map);
     }
 }
