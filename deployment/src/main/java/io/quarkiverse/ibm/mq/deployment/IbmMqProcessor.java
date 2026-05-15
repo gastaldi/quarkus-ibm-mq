@@ -16,15 +16,20 @@ import com.ibm.msg.client.jakarta.wmq.factories.WMQComponent;
 import com.ibm.msg.client.jakarta.wmq.factories.WMQFactoryFactory;
 import com.ibm.msg.client.jakarta.wmq.factories.admin.WMQJmsFactory;
 
+import io.quarkiverse.ibm.mq.runtime.MQResourceAdapterRecorder;
 import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.annotations.ExecutionTime;
+import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.dev.devservices.DevServicesConfig;
+import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.devservices.common.JBossLoggingConsumer;
+import io.quarkus.maven.dependency.ResolvedDependency;
 
 class IbmMqProcessor {
 
@@ -50,6 +55,18 @@ class IbmMqProcessor {
                 MQJMSComponent.class,
                 JMSComponent.class,
                 WMQComponent.class).constructors().methods().fields().build());
+    }
+
+    @BuildStep
+    @Record(ExecutionTime.STATIC_INIT)
+    void recordProductVersion(MQResourceAdapterRecorder recorder, CurateOutcomeBuildItem curated) {
+        String version = curated.getApplicationModel().getDependencies().stream()
+                .filter(d -> "com.ibm.mq".equals(d.getGroupId())
+                        && "com.ibm.mq.jakarta.connector".equals(d.getArtifactId()))
+                .map(ResolvedDependency::getVersion)
+                .findFirst()
+                .orElse("unknown");
+        recorder.setProductVersion(version);
     }
 
     @BuildStep
