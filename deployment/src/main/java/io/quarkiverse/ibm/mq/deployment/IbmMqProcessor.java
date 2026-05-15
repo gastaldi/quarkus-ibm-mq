@@ -108,7 +108,7 @@ class IbmMqProcessor {
 
         return DevServicesResultBuildItem.discovered()
                 .containerId(container.getContainerId())
-                .name("IBM MQ Dev Service")
+                .feature(FEATURE)
                 .description("IBM MQ Container")
                 .config(configOverrides)
                 .build();
