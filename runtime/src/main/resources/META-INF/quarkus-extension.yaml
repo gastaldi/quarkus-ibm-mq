@@ -7,3 +7,4 @@ metadata:
   categories:
     - "integration"
   status: "preview"
+  icon-url: "https://raw.githubusercontent.com/carbon-design-system/carbon/refs/heads/main/packages/icons/src/svg/32/ibm--mq.svg"
