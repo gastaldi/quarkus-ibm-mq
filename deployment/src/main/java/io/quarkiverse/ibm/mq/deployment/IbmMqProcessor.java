@@ -17,11 +17,13 @@ import com.ibm.msg.client.jakarta.wmq.factories.WMQFactoryFactory;
 import com.ibm.msg.client.jakarta.wmq.factories.admin.WMQJmsFactory;
 
 import io.quarkiverse.ibm.mq.runtime.MQResourceAdapterRecorder;
+import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.DevServicesLauncherConfigResultBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.NativeImageResourceBuildItem;
@@ -31,6 +33,8 @@ import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildI
 import io.quarkus.deployment.dev.devservices.DevServicesConfig;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.devservices.common.JBossLoggingConsumer;
+import io.quarkus.devui.spi.page.CardPageBuildItem;
+import io.quarkus.devui.spi.page.Page;
 import io.quarkus.maven.dependency.ResolvedDependency;
 
 class IbmMqProcessor {
@@ -146,5 +150,39 @@ class IbmMqProcessor {
                 .description("IBM MQ Container")
                 .config(configOverrides)
                 .build();
+    }
+
+    @BuildStep(onlyIf = IsDevelopment.class)
+    CardPageBuildItem devUiCard(DevServicesLauncherConfigResultBuildItem devServicesConfig,
+            IbmMqBuildTimeConfig buildTimeConfig,
+            CurateOutcomeBuildItem curated) {
+        CardPageBuildItem card = new CardPageBuildItem();
+        curated.getApplicationModel().getDependencies().stream()
+                .filter(d -> "com.ibm.mq".equals(d.getGroupId())
+                        && "com.ibm.mq.jakarta.connector".equals(d.getArtifactId()))
+                .map(ResolvedDependency::getVersion)
+                .findFirst()
+                .ifPresent(v -> card.addLibraryVersion("com.ibm.mq", "com.ibm.mq.jakarta.connector",
+                        "IBM MQ Resource Adapter", "https://www.ibm.com/docs/en/ibm-mq"));
+        Map<String, String> config = devServicesConfig.getConfig();
+        String host = config.getOrDefault("ibm-mq.host-name", "localhost");
+        String port = config.getOrDefault("ibm-mq.port", "1414");
+
+        card.addPage(Page.externalPageBuilder("Connection URL")
+                .icon("font-awesome-solid:plug")
+                .url("https://www.ibm.com/docs/en/ibm-mq")
+                .doNotEmbed()
+                .staticLabel(host + ":" + port));
+
+        if (buildTimeConfig.devservices().webServerEnabled()) {
+            String webPort = config.getOrDefault("ibm-mq.webserver.port", "9443");
+            String webUrl = "https://" + host + ":" + webPort + "/ibmmq/console/";
+            card.addPage(Page.externalPageBuilder("Web Console")
+                    .icon("font-awesome-solid:globe")
+                    .url(webUrl, webUrl)
+                    .doNotEmbed()
+                    .isHtmlContent());
+        }
+        return card;
     }
 }
