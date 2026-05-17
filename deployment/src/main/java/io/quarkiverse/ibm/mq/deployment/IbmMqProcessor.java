@@ -154,16 +154,10 @@ class IbmMqProcessor {
 
     @BuildStep(onlyIf = IsDevelopment.class)
     CardPageBuildItem devUiCard(DevServicesLauncherConfigResultBuildItem devServicesConfig,
-            IbmMqBuildTimeConfig buildTimeConfig,
-            CurateOutcomeBuildItem curated) {
+            IbmMqBuildTimeConfig buildTimeConfig) {
         CardPageBuildItem card = new CardPageBuildItem();
-        curated.getApplicationModel().getDependencies().stream()
-                .filter(d -> "com.ibm.mq".equals(d.getGroupId())
-                        && "com.ibm.mq.jakarta.connector".equals(d.getArtifactId()))
-                .map(ResolvedDependency::getVersion)
-                .findFirst()
-                .ifPresent(v -> card.addLibraryVersion("com.ibm.mq", "com.ibm.mq.jakarta.connector",
-                        "IBM MQ Resource Adapter", "https://www.ibm.com/docs/en/ibm-mq"));
+        card.addLibraryVersion("com.ibm.mq", "com.ibm.mq.jakarta.connector",
+                "IBM MQ Resource Adapter", "https://www.ibm.com/docs/en/ibm-mq");
         Map<String, String> config = devServicesConfig.getConfig();
         String host = config.getOrDefault("ibm-mq.host-name", "localhost");
         String port = config.getOrDefault("ibm-mq.port", "1414");
